@@ -1,0 +1,11 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: argo-rollouts
+  namespace: argo-rollouts
+spec:
+  template:
+    spec:
+      containers:
+        - name: argo-rollouts
+          image: quay.io/argoproj/argo-rollouts:v0.0.1
