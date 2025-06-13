@@ -8,4 +8,4 @@ spec:
     spec:
       containers:
         - name: argo-rollouts
-          image: quay.io/argoproj/argo-rollouts:v0.0.1
+          image: quay.io/argoproj/argo-rollouts:v0.10.2
