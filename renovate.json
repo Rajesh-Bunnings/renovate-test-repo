@@ -5,7 +5,7 @@
   ],
   "regexManagers": [
       {
-        "fileMatch": ["^argo-rollouts/environments/dev/deployment\\.yaml$"],
+        "fileMatch": ["^argo-rollouts/environments/dev/kustomization\\.yaml$"],
         "matchStrings": [
           "(?<depName>quay\\.io/argoproj/argo-rollouts):(?<currentValue>[\\w.-]+)"
         ],
