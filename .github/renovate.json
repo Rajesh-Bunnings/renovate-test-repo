@@ -1,0 +1,14 @@
+{
+    "extends": ["config:recommended"],
+    "regexManagers": [
+      {
+        "fileMatch": ["^argo-rollouts/environments/dev/deployment\\.yaml$"],
+        "matchStrings": [
+          "(?<depName>quay\\.io/argoproj/argo-rollouts):(?<currentValue>[\\w.-]+)"
+        ],
+        "datasourceTemplate": "docker",
+        "versioningTemplate": "semver"
+      }
+    ]
+  }
+  
