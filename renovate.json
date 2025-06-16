@@ -13,7 +13,8 @@
         ],
         "datasourceTemplate": "docker",
         "versioningTemplate": "semver",
-        "depNameTemplate": "{{customDep}}-dev"
+        "depNameTemplate": "{{customDep}}-dev",
+        "lookupNameTemplate": "{{customDep}}"
       },
       {
         "description": "Update test environment after dev",
@@ -23,7 +24,8 @@
         ],
         "datasourceTemplate": "docker",
         "versioningTemplate": "semver",
-        "depNameTemplate": "{{customDep}}-test"
+        "depNameTemplate": "{{customDep}}-test",
+        "lookupNameTemplate": "{{customDep}}"
       }
     ]
     }
