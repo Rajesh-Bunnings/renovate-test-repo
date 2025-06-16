@@ -7,7 +7,7 @@
   "regexManagers": [
       {
         "description": "Update dev environment first",
-        "fileMatch": ["^argo-rollouts/environments/dev/kustomization\\.yaml$"],
+        "fileMatch": ["^argo-rollouts/environments/.+/kustomization\\.yaml$"],
         "matchStrings": [
           "(?<depName>quay\\.io/argoproj/argo-rollouts):(?<currentValue>[\\w.-]+)"
         ],
