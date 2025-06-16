@@ -1,7 +1,7 @@
 {
   "onboarding": false,
   "requireConfig": true,
-  "baseBranches": ["feature/update-dev"],
+  "baseBranches": ["feature/test"],
   "$schema": "https://docs.renovatebot.com/renovate-schema.json",
   "extends": [
     "config:base"
