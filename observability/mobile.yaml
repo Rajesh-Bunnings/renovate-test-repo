@@ -1,0 +1,195 @@
+helm repo add jetstack https://charts.jetstack.io
+helm repo add open-telemetry https://open-telemetry.github.io/opentelemetry-helm-charts
+
+helm repo update jetstack
+helm repo update open-telemetry
+
+export certManagerHelmChartVersion=1.12.7
+export otelOperatorChartVersion=0.47.0
+
+# Cert Manager
+helm upgrade \
+    cert-manager jetstack/cert-manager \
+    --namespace cert-manager \
+    --create-namespace \
+    --version $certManagerHelmChartVersion \
+    --install --atomic \
+    --set installCRDs=true
+
+#From otel-operator v0.88 onwards there was a new CRD called OPAMbridge that was added. This CRD is required for the opentelemetry-operator to work.
+#https://github.com/open-telemetry/opentelemetry-helm-charts/issues/943
+kubectl apply -f crd-opentelemetry.io_opampbridges.yaml
+
+# Opentelemetry operator
+helm upgrade --install --atomic --wait --timeout 10m --create-namespace --namespace observability-system opentelemetry-operator open-telemetry/opentelemetry-operator --version $otelOperatorChartVersion
+
+# Opentelemetry collector
+envsubst < ~/projects/store-and-team-platform.cluster.infra/observability/otel-collector.yaml | kubectl apply -f -
+
+------------------------------------------------------------------------------------------------------------------------------------------------
+## Commands to apply changes in OTEL collector
+
+kubectx BGL-SS-NPE-DEV-MEL-AKS-MOB-Cluster02-admin
+export environment=dev
+export OTLP_EXPORTER_TENANT="mob-ss-${environment}"
+export CLUSTER_NAME=BGL-SS-NPE-DEV-MEL-AKS-MOB-Cluster02
+export ENVIRONMENT=${environment}
+export LOCATION=mel
+envsubst < ~/projects/store-and-team-platform.cluster.infra/observability/otel-collector.yaml | kubectl apply -f -
+
+kubectx BGL-SS-NPE-DEV-SYD-AKS-MOB-Cluster02-admin
+export environment=dev
+export OTLP_EXPORTER_TENANT="mob-ss-${environment}"
+export CLUSTER_NAME=BGL-SS-NPE-DEV-SYD-AKS-MOB-Cluster02
+export ENVIRONMENT=${environment}
+export LOCATION=syd
+envsubst < ~/projects/store-and-team-platform.cluster.infra/observability/otel-collector.yaml | kubectl apply -f -
+
+kubectx BGL-SS-NPE-SIT-SYD-AKS-MOB-Cluster02-admin
+export environment=sit
+export OTLP_EXPORTER_TENANT="mob-ss-${environment}"
+export CLUSTER_NAME=BGL-SS-NPE-SIT-SYD-AKS-MOB-Cluster02
+export ENVIRONMENT=${environment}
+export LOCATION=syd
+envsubst < ~/projects/store-and-team-platform.cluster.infra/observability/otel-collector.yaml | kubectl apply -f -
+
+kubectx BGL-SS-NPE-SIT-MEL-AKS-MOB-Cluster02-admin
+export environment=sit
+export OTLP_EXPORTER_TENANT="mob-ss-${environment}"
+export CLUSTER_NAME=BGL-SS-NPE-SIT-MEL-AKS-MOB-Cluster02
+export ENVIRONMENT=${environment}
+export LOCATION=mel
+envsubst < ~/projects/store-and-team-platform.cluster.infra/observability/otel-collector.yaml | kubectl apply -f -
+
+kubectx BGL-SS-NPE-UAT-SYD-AKS-MOB-Cluster02-admin
+export environment=uat
+export OTLP_EXPORTER_TENANT="mob-ss-${environment}"
+export CLUSTER_NAME=BGL-SS-NPE-UAT-SYD-AKS-MOB-Cluster02
+export ENVIRONMENT=${environment}
+export LOCATION=syd
+envsubst < ~/projects/store-and-team-platform.cluster.infra/observability/otel-collector.yaml | kubectl apply -f -
+
+kubectx BGL-SS-NPE-UAT-MEL-AKS-MOB-Cluster02-admin
+export environment=uat
+export OTLP_EXPORTER_TENANT="mob-ss-${environment}"
+export CLUSTER_NAME=BGL-SS-NPE-UAT-MEL-AKS-MOB-Cluster02
+export ENVIRONMENT=${environment}
+export LOCATION=mel
+envsubst < ~/projects/store-and-team-platform.cluster.infra/observability/otel-collector.yaml | kubectl apply -f -
+
+kubectx BGL-SS-STG-MEL-AKS-MOB-Cluster02-admin
+export environment=stg
+export OTLP_EXPORTER_TENANT="mob-ss-${environment}"
+export CLUSTER_NAME=BGL-SS-STG-MEL-AKS-MOB-Cluster02
+export ENVIRONMENT=${environment}
+export LOCATION=mel
+envsubst < ~/projects/store-and-team-platform.cluster.infra/observability/otel-collector.yaml | kubectl apply -f -
+
+kubectx BGL-SS-STG-SYD-AKS-MOB-Cluster02-admin
+export environment=stg
+export OTLP_EXPORTER_TENANT="mob-ss-${environment}"
+export CLUSTER_NAME=BGL-SS-STG-SYD-AKS-MOB-Cluster02
+export ENVIRONMENT=${environment}
+export LOCATION=syd
+envsubst < ~/projects/store-and-team-platform.cluster.infra/observability/otel-collector.yaml | kubectl apply -f -
+
+kubectx BGL-SS-PRD-MEL-AKS-MOB-Cluster02-admin
+export environment=prod
+export OTLP_EXPORTER_TENANT="mob-ss-${environment}"
+export CLUSTER_NAME=BGL-SS-PRD-MEL-AKS-MOB-Cluster02
+export ENVIRONMENT=${environment}
+export LOCATION=mel
+envsubst < ~/projects/store-and-team-platform.cluster.infra/observability/otel-collector.yaml | kubectl apply -f -
+
+kubectx BGL-SS-PRD-SYD-AKS-MOB-Cluster02-admin
+export environment=prod
+export OTLP_EXPORTER_TENANT="mob-ss-${environment}"
+export CLUSTER_NAME=BGL-SS-PRD-SYD-AKS-MOB-Cluster02
+export ENVIRONMENT=${environment}
+export LOCATION=syd
+envsubst < ~/projects/store-and-team-platform.cluster.infra/observability/otel-collector.yaml | kubectl apply -f -
+
+
+------------------------------------------------------------------------------------------------------------------------------------------------
+# ENC
+
+kubectx BGL-ENC-NPE-DEV-MEL-AKS-MOB-Cluster02-admin
+export environment=dev
+export OTLP_EXPORTER_TENANT="mob-enc-${environment}"
+export CLUSTER_NAME=BGL-ENC-NPE-DEV-MEL-AKS-MOB-Cluster02
+export ENVIRONMENT=${environment}
+export LOCATION=mel
+envsubst < ~/projects/store-and-team-platform.cluster.infra/observability/otel-collector.yaml | kubectl apply -f -
+
+kubectx BGL-ENC-NPE-DEV-SYD-AKS-MOB-Cluster02-admin
+export environment=dev
+export OTLP_EXPORTER_TENANT="mob-enc-${environment}"
+export CLUSTER_NAME=BGL-ENC-NPE-DEV-SYD-AKS-MOB-Cluster02
+export ENVIRONMENT=${environment}
+export LOCATION=syd
+envsubst < ~/projects/store-and-team-platform.cluster.infra/observability/otel-collector.yaml | kubectl apply -f -
+
+
+kubectx BGL-ENC-NPE-SIT-SYD-AKS-MOB-Cluster02-admin
+export environment=sit
+export OTLP_EXPORTER_TENANT="mob-enc-${environment}"
+export CLUSTER_NAME=BGL-ENC-NPE-SIT-SYD-AKS-MOB-Cluster02
+export ENVIRONMENT=${environment}
+export LOCATION=syd
+envsubst < ~/projects/store-and-team-platform.cluster.infra/observability/otel-collector.yaml | kubectl apply -f -
+
+kubectx BGL-ENC-NPE-SIT-MEL-AKS-MOB-Cluster02-admin
+export environment=sit
+export OTLP_EXPORTER_TENANT="mob-enc-${environment}"
+export CLUSTER_NAME=BGL-ENC-NPE-SIT-MEL-AKS-MOB-Cluster02
+export ENVIRONMENT=${environment}
+export LOCATION=mel
+envsubst < ~/projects/store-and-team-platform.cluster.infra/observability/otel-collector.yaml | kubectl apply -f -
+
+kubectx BGL-ENC-NPE-UAT-SYD-AKS-MOB-Cluster02-admin
+export environment=uat
+export OTLP_EXPORTER_TENANT="mob-enc-${environment}"
+export CLUSTER_NAME=BGL-ENC-NPE-UAT-SYD-AKS-MOB-Cluster02
+export ENVIRONMENT=${environment}
+export LOCATION=syd
+envsubst < ~/projects/store-and-team-platform.cluster.infra/observability/otel-collector.yaml | kubectl apply -f -
+
+kubectx BGL-ENC-NPE-UAT-MEL-AKS-MOB-Cluster02-admin
+export environment=uat
+export OTLP_EXPORTER_TENANT="mob-enc-${environment}"
+export CLUSTER_NAME=BGL-ENC-NPE-UAT-MEL-AKS-MOB-Cluster02
+export ENVIRONMENT=${environment}
+export LOCATION=mel
+envsubst < ~/projects/store-and-team-platform.cluster.infra/observability/otel-collector.yaml | kubectl apply -f -
+
+kubectx BGL-ENC-STG-MEL-AKS-MOB-Cluster02-admin
+export environment=stg
+export OTLP_EXPORTER_TENANT="mob-enc-${environment}"
+export CLUSTER_NAME=BGL-ENC-STG-MEL-AKS-MOB-Cluster02
+export ENVIRONMENT=${environment}
+export LOCATION=mel
+envsubst < ~/projects/store-and-team-platform.cluster.infra/observability/otel-collector.yaml | kubectl apply -f -
+
+kubectx BGL-ENC-STG-SYD-AKS-MOB-Cluster02-admin
+export environment=stg
+export OTLP_EXPORTER_TENANT="mob-enc-${environment}"
+export CLUSTER_NAME=BGL-ENC-STG-SYD-AKS-MOB-Cluster02
+export ENVIRONMENT=${environment}
+export LOCATION=syd
+envsubst < ~/projects/store-and-team-platform.cluster.infra/observability/otel-collector.yaml | kubectl apply -f -
+
+kubectx BGL-ENC-PRD-MEL-AKS-MOB-Cluster02-admin
+export environment=prod
+export OTLP_EXPORTER_TENANT="mob-enc-${environment}"
+export CLUSTER_NAME=BGL-ENC-PRD-MEL-AKS-MOB-Cluster02
+export ENVIRONMENT=${environment}
+export LOCATION=mel
+envsubst < ~/projects/store-and-team-platform.cluster.infra/observability/otel-collector.yaml | kubectl apply -f -
+
+kubectx BGL-ENC-PRD-SYD-AKS-MOB-Cluster02-admin
+export environment=prod
+export OTLP_EXPORTER_TENANT="mob-enc-${environment}"
+export CLUSTER_NAME=BGL-ENC-PRD-SYD-AKS-MOB-Cluster02
+export ENVIRONMENT=${environment}
+export LOCATION=syd
+envsubst < ~/projects/store-and-team-platform.cluster.infra/observability/otel-collector.yaml | kubectl apply -f -

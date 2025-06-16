@@ -1,0 +1,87 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app.kubernetes.io/component: cloudability
+    app.kubernetes.io/name: cloudability-metrics-agent
+    name: cloudability-metrics-agent
+  name: cloudability-metrics-agent
+  namespace: observability-system
+spec:
+  progressDeadlineSeconds: 600
+  replicas: 1
+  revisionHistoryLimit: 10
+  selector:
+    matchLabels:
+      app: cloudability-metrics-agent
+  strategy:
+    rollingUpdate:
+      maxSurge: 25%
+      maxUnavailable: 25%
+    type: RollingUpdate
+  template:
+    metadata:
+      creationTimestamp: null
+      labels:
+        app: cloudability-metrics-agent
+        app.kubernetes.io/component: cloudability
+        app.kubernetes.io/name: cloudability-metrics-agent
+    spec:
+      containers:
+      - args:
+        - kubernetes
+        env:
+        - name: CLOUDABILITY_API_KEY
+          valueFrom:
+            secretKeyRef:
+              name: otel-secret
+              key: cloudability_api_key
+        - name: CLOUDABILITY_CLUSTER_NAME
+          valueFrom:
+            configMapKeyRef:
+              name: otel-cm-config
+              key: cloudability_cluster_name
+        - name: CLOUDABILITY_POLL_INTERVAL
+          value: "180"
+        image: cloudability/metrics-agent:latest
+        imagePullPolicy: Always
+        livenessProbe:
+          exec:
+            command:
+            - touch
+            - tmp/healthy
+          failureThreshold: 3
+          initialDelaySeconds: 120
+          periodSeconds: 600
+          successThreshold: 1
+          timeoutSeconds: 1
+        name: cloudability-metrics-agent
+        resources:
+          requests:
+            cpu: 50m
+            memory: 512Mi
+        securityContext:
+          allowPrivilegeEscalation: false
+          capabilities:
+            drop:
+            - all
+          runAsNonRoot: true
+          runAsUser: 1000
+        terminationMessagePath: /dev/termination-log
+        terminationMessagePolicy: File
+      dnsPolicy: ClusterFirst
+      restartPolicy: Always
+      schedulerName: default-scheduler
+      securityContext: {}
+      serviceAccount: cloudability
+      serviceAccountName: cloudability
+      terminationGracePeriodSeconds: 30
+---
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  labels:
+    app.kubernetes.io/component: cloudability
+    app.kubernetes.io/name: cloudability-metrics-agent
+  name: cloudability
+  namespace: observability-system

@@ -1,0 +1,13 @@
+apiVersion: v1
+data:
+  apiToken: ZHQwYzAxLlZYM0FRQkxSQklaNE9VWEZKRTJESENFSS5YWk5IUlJFRDVNQ1BORVI1VVdONlNYT0dPSkFENURZWDRDWTVDWFpXQVFUWFJOU01TRlRTNlpNT0tBTFhZVTVI
+  dataIngestToken: ZHQwYzAxLlRWRFc2Vlg3VERUWkNZWU9VM1hSQjRUQS5VU01SVFAzR0ZINTZXQ1dOUTdST0dFWFVKS1JFWE40UFJSTE5KRUhJUVZNTVg2UTRJNkdPN1o2R1FGTFpUNTRT
+kind: Secret
+metadata:
+  annotations:
+    kubectl.kubernetes.io/last-applied-configuration: |
+      {"apiVersion":"v1","data":{"apiToken":"ZHQwYzAxLlZYM0FRQkxSQklaNE9VWEZKRTJESENFSS5YWk5IUlJFRDVNQ1BORVI1VVdONlNYT0dPSkFENURZWDRDWTVDWFpXQVFUWFJOU01TRlRTNlpNT0tBTFhZVTVI","dataIngestToken":"ZHQwYzAxLlRWRFc2Vlg3VERUWkNZWU9VM1hSQjRUQS5VU01SVFAzR0ZINTZXQ1dOUTdST0dFWFVKS1JFWE40UFJSTE5KRUhJUVZNTVg2UTRJNkdPN1o2R1FGTFpUNTRT"},"kind":"Secret","metadata":{"annotations":{},"creationTimestamp":null,"name":"dynakube","namespace":"dynatrace"}}
+  creationTimestamp: "2023-09-15T04:06:29Z"
+  name: dynakube
+  namespace: dynatrace
+type: Opaque

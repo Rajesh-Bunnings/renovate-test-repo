@@ -1,0 +1,37 @@
+apiVersion: helm.toolkit.fluxcd.io/v2beta1
+kind: HelmRelease
+metadata:
+  name: ingress-nginx-public
+  namespace: ingress-public
+spec:
+  releaseName: ingress-nginx-public
+  chart:
+    spec:
+      chart: ingress-nginx
+      sourceRef:
+        kind: HelmRepository
+        name: ingress-nginx-public
+        namespace: ingress-public
+      version: 4.10.0
+  interval: 1h
+  values:
+    controller:
+      extraArgs:
+        v: "3"
+      ingressClassResource:
+        name: nginx-external
+        controllerValue: "k8s.io/nginx-external"
+        enabled: true
+      ingressClassByName: true
+  valuesFrom:
+    - kind: ConfigMap
+      name: ingress-nginx-public
+---
+apiVersion: source.toolkit.fluxcd.io/v1beta2
+kind: HelmRepository
+metadata:
+  name: ingress-nginx-public
+  namespace: ingress-public
+spec:
+  interval: 1m
+  url: https://kubernetes.github.io/ingress-nginx

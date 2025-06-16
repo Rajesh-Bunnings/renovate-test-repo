@@ -1,0 +1,36 @@
+controller:
+  allowSnippetAnnotations: true
+  ingressClass: nginx
+  replicaCount: 2
+  podAnnotations: 
+    linkerd.io/inject: enabled
+  nodeSelector:
+    beta.kubernetes.io/os: linux
+  config:
+      use-forwarded-headers: "true"
+      compute-full-forwarded-for: "true"
+      proxy-body-size: "100M"
+      large-client-header-buffers: "4 16k"
+      annotations-risk-level: Critical
+      http-snippet: |
+        # Init and default $pathBase to an empty string by way of a map directive.
+        # Necessary to get nginx-ingress controllers to startup without error.
+        map $host $pathBase {
+          default "";
+        }
+
+        map $http_x_original_base_url $originalBaseUrl { 
+          ~.+  $http_x_original_base_url;
+          default    $scheme://$host$pathBase;
+        }
+        map $http_x_forwarded_pathbase $forwardedPathBase { 
+          ~.+  $http_x_forwarded_pathbase;
+          default    $pathBase;
+        }
+  service:
+    annotations:
+      service.beta.kubernetes.io/azure-load-balancer-internal: "true"
+      service.beta.kubernetes.io/azure-load-balancer-health-probe-request-path: /healthz
+defaultBackend:
+  nodeSelector:
+    beta.kubernetes.io/os: linux

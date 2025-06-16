@@ -3,9 +3,7 @@
   "extends": [
     "config:recommended"
   ],
-  "enabledManagers": [
-    "regex"
-  ],
+  "enabledManagers": ["regex"],
   "regexManagers": [
     {
       "description": "Update quay.io argo-rollouts image tags",
@@ -25,13 +23,99 @@
       "depNameTemplate": "cert-manager",
       "datasourceTemplate": "helm",
       "versioningTemplate": "semver"
+    },
+    {
+      "description": "Update akv2k8s Helm chart version",
+      "fileMatch": ["^akv2k8s/environments/dev/kustomization\\.yaml$"],
+      "matchStrings": [
+        "version:\\s*\"(?<currentValue>[\\d.]+)\"\\s*#\\s*Use the version from vars"
+      ],
+      "depNameTemplate": "SparebankenVest/azure-key-vault-to-kubernetes",
+      "datasourceTemplate": "helm",
+      "versioningTemplate": "semver"
+    },
+    {
+      "description": "Update Dynatrace Operator Helm chart version",
+      "fileMatch": ["^dynatrace/environments/dev/kustomization\\.yaml$"],
+      "matchStrings": [
+        "version:\\s*\"(?<currentValue>[\\d.]+)\"\\s*#\\s*Use the version from vars"
+      ],
+      "depNameTemplate": "dynatrace-operator",
+      "datasourceTemplate": "helm",
+      "versioningTemplate": "semver"
+    },
+    {
+      "description": "Update KEDA Helm chart version",
+      "fileMatch": ["^keda/environments/dev/kustomization\\.yaml$"],
+      "matchStrings": [
+        "version:\\s*\"(?<currentValue>[\\d.]+)\"\\s*#\\s*Use the version from vars"
+      ],
+      "depNameTemplate": "kedacore/keda",
+      "datasourceTemplate": "helm",
+      "versioningTemplate": "semver"
+    },
+    {
+      "description": "Update Logstash Helm chart version",
+      "fileMatch": ["^logstash/environments/dev/kustomization\\.yaml$"],
+      "matchStrings": [
+        "version:\\s*\"(?<currentValue>[\\d.]+)\"\\s*#\\s*Use the version from vars"
+      ],
+      "depNameTemplate": "elastic/logstash",
+      "datasourceTemplate": "helm",
+      "versioningTemplate": "semver"
+    },
+    {
+      "description": "Update ingress-nginx Helm chart version",
+      "fileMatch": ["^nginx-ingress-controller/environments/dev/kustomization\\.yaml$"],
+      "matchStrings": [
+        "version:\\s*\"(?<currentValue>[\\d.]+)\"\\s*#\\s*Use the version from vars"
+      ],
+      "depNameTemplate": "ingress-nginx/ingress-nginx",
+      "datasourceTemplate": "helm",
+      "versioningTemplate": "semver"
+    },
+    {
+      "description": "Update OpenTelemetry Operator Helm chart version",
+      "fileMatch": ["^observability/environments/dev/kustomization\\.yaml$"],
+      "matchStrings": [
+        "version:\\s*\"(?<currentValue>[\\d.]+)\"\\s*#\\s*Use the version from vars"
+      ],
+      "depNameTemplate": "open-telemetry/opentelemetry-operator",
+      "datasourceTemplate": "helm",
+      "versioningTemplate": "semver"
     }
+    
   ],
   "packageRules": [
     {
       "matchDatasources": ["helm"],
       "matchPackageNames": ["cert-manager"],
       "registryUrls": ["https://charts.jetstack.io"]
+    },
+    {
+      "matchDatasources": ["helm"],
+      "matchPackageNames": ["SparebankenVest/azure-key-vault-to-kubernetes"],
+      "registryUrls": ["https://charts.azurecr.io"]
+    },
+    {
+      "matchDatasources": ["helm"],
+      "matchPackageNames": ["dynatrace-operator"],
+      "registryUrls": ["https://raw.githubusercontent.com/Dynatrace/helm-charts/main/repos/stable"]
+    },
+    {
+      "matchDatasources": ["helm"],
+      "matchPackageNames": ["kedacore/keda"],
+      "registryUrls": ["https://kedacore.github.io/charts"]
+    },
+    {
+      "matchDatasources": ["helm"],
+      "matchPackageNames": ["elastic/logstash"],
+      "registryUrls": ["https://helm.elastic.co"]
+    },
+    {
+      "matchDatasources": ["helm"],
+      "matchPackageNames": ["open-telemetry/opentelemetry-operator"],
+      "registryUrls": ["https://open-telemetry.github.io/opentelemetry-helm-charts"]
     }
   ]
 }

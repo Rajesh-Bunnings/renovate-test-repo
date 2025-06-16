@@ -1,0 +1,58 @@
+# default values are defined here https://github.com/Dynatrace/dynatrace-operator/blob/v0.13.0/config/helm/chart/default/values.yaml
+installCRD: true
+
+operator:
+  requests:
+    cpu: 10m
+    memory: 64Mi
+  limits:
+    cpu: 300m
+    memory: 256Mi
+
+webhook:
+  requests:
+    cpu: 10m
+    memory: 64Mi
+  limits:
+    cpu: 300m
+    memory: 256Mi
+
+csidriver:
+  enabled: true
+  tolerations:
+  - key: "sku"
+    operator: "Equal"
+    value: "worker"
+    effect: "NoSchedule"
+  server:
+    resources:
+      requests:
+        cpu: 5m
+        memory: 32Mi
+      limits:
+        cpu: 300m
+        memory: 256Mi
+  provisioner:
+    resources:
+      requests:
+        cpu: 5m
+        memory: 128Mi
+      limits:
+        cpu: 300m
+        memory: 256Mi
+  registrar:
+    resources:
+      requests:
+        cpu: 5m
+        memory: 16Mi
+      limits:
+        cpu: 300m
+        memory: 128Mi
+  livenessprobe:
+    resources:
+      requests:
+        cpu: 5m
+        memory: 16Mi
+      limits:
+        cpu: 100m
+        memory: 128Mi
