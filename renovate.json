@@ -13,7 +13,7 @@
         ],
         "datasourceTemplate": "docker",
         "versioningTemplate": "semver",
-        "depNameTemplate": "argo-rollouts-dev"
+        "depNameTemplate": "{{customDep}}-dev"
       },
       {
         "description": "Update test environment after dev",
@@ -23,7 +23,7 @@
         ],
         "datasourceTemplate": "docker",
         "versioningTemplate": "semver",
-        "depNameTemplate": "argo-rollouts-test"
+        "depNameTemplate": "{{customDep}}-test"
       }
     ]
     }
