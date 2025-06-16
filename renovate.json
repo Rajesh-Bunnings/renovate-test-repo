@@ -1,18 +1,23 @@
 {
   "$schema": "https://docs.renovatebot.com/renovate-schema.json",
   "extends": [
-      "config:base"
-    ],
-  "enabledManagers": ["regex"],  
-  "regexManagers": [
-      {
-        "description": "Update dev environment first",
-        "fileMatch": ["^argo-rollouts/environments/.*/kustomization\\.yaml$"],
-        "matchStrings": [
-          "(?<depName>quay\\.io/argoproj/argo-rollouts):(?<currentValue>[\\w.-]+)"
-        ],
-        "datasourceTemplate": "docker",
-        "versioningTemplate": "semver"
-      }
-    ]
+    "config:recommended"
+  ],
+  "enabledManagers": [
+    "custom.regex"
+  ],
+  "customManagers": [
+    {
+      "customType": "regex",
+      "description": "Update dev environment first",
+      "managerFilePatterns": [
+        "/^argo-rollouts/environments/.*/kustomization\\.yaml$/"
+      ],
+      "matchStrings": [
+        "(?<depName>quay\\.io/argoproj/argo-rollouts):(?<currentValue>[\\w.-]+)"
+      ],
+      "datasourceTemplate": "docker",
+      "versioningTemplate": "semver"
     }
+  ]
+}
