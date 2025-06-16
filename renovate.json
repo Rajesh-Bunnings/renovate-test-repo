@@ -1,7 +1,4 @@
 {
-  "onboarding": false,
-  "requireConfig": true,
-  "baseBranches": ["feature/test"],
   "$schema": "https://docs.renovatebot.com/renovate-schema.json",
   "extends": [
     "config:base"
@@ -15,7 +12,9 @@
           "(?<depName>quay\\.io/argoproj/argo-rollouts):(?<currentValue>[\\w.-]+)"
         ],
         "datasourceTemplate": "docker",
-        "versioningTemplate": "semver"
+        "versioningTemplate": "semver",
+        "separateMinorPatch": true,
+        "extractVersion": "^quay\\.io/argoproj/argo-rollouts:(?<version>[\\w.-]+)$"
       },
       {
         "description": "Update test environment after dev",
@@ -24,7 +23,9 @@
           "(?<depName>quay\\.io/argoproj/argo-rollouts):(?<currentValue>[\\w.-]+)"
         ],
         "datasourceTemplate": "docker",
-        "versioningTemplate": "semver"
+        "versioningTemplate": "semver",
+        "separateMinorPatch": true,
+        "extractVersion": "^quay\\.io/argoproj/argo-rollouts:(?<version>[\\w.-]+)$"
       }
     ]
     }
