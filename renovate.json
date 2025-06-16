@@ -1,10 +1,15 @@
 {
+  "onboarding": false,
+  "requireConfig": true,
+  "baseBranches": ["feature/update-dev"],
   "$schema": "https://docs.renovatebot.com/renovate-schema.json",
   "extends": [
-    "config:recommended"
+    "config:base"
   ],
+  "enabledManagers": [],
   "regexManagers": [
       {
+        "description": "Update dev environment first",
         "fileMatch": ["^argo-rollouts/environments/dev/kustomization\\.yaml$"],
         "matchStrings": [
           "(?<depName>quay\\.io/argoproj/argo-rollouts):(?<currentValue>[\\w.-]+)"
@@ -13,6 +18,7 @@
         "versioningTemplate": "semver"
       },
       {
+        "description": "Update test environment after dev",
         "fileMatch": ["^argo-rollouts/environments/test/kustomization\\.yaml$"],
         "matchStrings": [
           "(?<depName>quay\\.io/argoproj/argo-rollouts):(?<currentValue>[\\w.-]+)"
