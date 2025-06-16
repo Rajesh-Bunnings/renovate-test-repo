@@ -18,6 +18,16 @@
       ],
       "datasourceTemplate": "docker",
       "versioningTemplate": "semver"
+    },
+    {
+      "description": "Update cert-manager Helm chart versions",
+      "fileMatch": ["^cert-manager/environments/.*/kustomization\\.yaml$"],
+      "matchStrings": [
+        "version:\\s*\"(?<currentValue>[\\d.]+)\"\\s*#\\s*Use the version from vars"
+      ],
+      "depName": "jetstack/cert-manager",
+      "datasourceTemplate": "helm",
+      "versioningTemplate": "semver"
     }
   ]
 }
