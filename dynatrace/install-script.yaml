@@ -1,0 +1,67 @@
+export dynatraceApiToken=
+export dynatraceIngestToken=
+
+export cluster_name=BGL-SS-STG-MEL-AKS-MOB-Cluster02
+export dynatraceResourceOveridesEnabled=false
+export dynatrace_tenant_id=uun69539
+export dynatraceVersion=0.13.0
+
+helm repo add dynatrace https://raw.githubusercontent.com/Dynatrace/dynatrace-operator/main/config/helm/repos/stable
+helm repo update dynatrace
+helm upgrade --version ${dynatraceVersion} dynatrace-operator dynatrace/dynatrace-operator --install --atomic --wait --timeout 10m --create-namespace --namespace dynatrace -f values.yaml
+echo "Creating secret ..."
+kubectl -n dynatrace create secret generic dynakube --from-literal="apiToken=$dynatraceApiToken" --from-literal="dataIngestToken=$dynatraceIngestToken" --dry-run=client -o yaml \
+    | kubectl apply -f -
+
+echo "Applying Dynatrace operator custom resource ..."
+envsubst < cloudnativefullstack.yaml | kubectl apply -f -
+kubectl label namespace apps dynatrace-oneagent=enabled
+
+kubectl label namespace integration dynatrace-oneagent=enabled
+kubectl label namespace bdotnet dynatrace-oneagent=enabled
+
+**********************************************************************************************************************
+BGL-ENC-STG-MEL-AKS-MOB-Cluster02-admin
+BGL-ENC-STG-SYD-AKS-MOB-Cluster02-admin
+BGL-SS-STG-SYD-AKS-MOB-Cluster02-admin
+BGL-SS-STG-MEL-AKS-MOB-Cluster02-admin
+
+BGL-SS-PRD-SYD-AKS-MOB-Cluster02-admin
+BGL-SS-PRD-MEL-AKS-MOB-Cluster02-admin
+BGL-ENC-PRD-MEL-AKS-MOB-Cluster02-admin
+BGL-ENC-PRD-SYD-AKS-MOB-Cluster02-admin
+
+export dynatraceVersion=0.13.0
+
+export dynatraceApiToken=
+
+export dynatraceIngestToken=
+
+export dynatraceResourceOveridesEnabled=false
+export cluster_name=
+#uun69539 #twh49101
+export dynatrace_tenant_id=
+
+
+helm repo add dynatrace https://raw.githubusercontent.com/Dynatrace/dynatrace-operator/main/config/helm/repos/stable
+helm repo update dynatrace
+# additional_params=()
+# if [[ $dynatraceResourceOveridesEnabled == true ]] ; then
+#       additional_params+=(-f resource_overrides.yaml)
+# fi
+helm upgrade --version ${dynatraceVersion} dynatrace-operator dynatrace/dynatrace-operator --install --atomic --wait --timeout 10m --create-namespace --namespace dynatrace -f values.yaml
+
+echo "Creating secret ..."
+kubectl -n dynatrace create secret generic dynakube --from-literal="apiToken=$dynatraceApiToken" --from-literal="dataIngestToken=$dynatraceIngestToken" --dry-run=client -o yaml \
+    | kubectl apply -f -
+
+echo "Applying Dynatrace operator custom resource ..."
+envsubst < cloudnativefullstack.yaml | kubectl apply -f -
+
+#************************************************************************************************************************************************
+#************************************************************************************************************************************************
+Clean up
+kubectl delete dynakube dynakube -n dynatrace
+helm del dynatrace-operator  -n dynatrace
+kubectl delete secrets dynatrace-webhook-certs  -n dynatrace
+kubectl delete crd dynakubes.dynatrace.com

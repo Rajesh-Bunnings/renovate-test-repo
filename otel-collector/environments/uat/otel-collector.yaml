@@ -1,0 +1,224 @@
+apiVersion: opentelemetry.io/v1alpha1
+kind: OpenTelemetryCollector
+metadata:
+  name: otel
+  namespace: observability-system
+spec:
+  mode: deployment
+  replicas: 1
+  image: otel/opentelemetry-collector-contrib:0.105.0 # Basic Auth is available only in contrib version.
+  resources:
+    requests:
+      memory: 1500Mi
+      cpu: 500m
+    limits:
+      memory: 8Gi
+  env:
+    - name: OTLP_BASICAUTH_USERNAME
+      valueFrom:
+        secretKeyRef:
+          name: otel-secret
+          key: username
+    - name: OTLP_BASICAUTH_PASSWORD
+      valueFrom:
+        secretKeyRef:
+          name: otel-secret
+          key: password
+    - name: org_id
+      valueFrom:
+        configMapKeyRef:
+          name: otel-cm-config
+          key: org_id
+    - name: cluster
+      valueFrom:
+        configMapKeyRef:
+          name: otel-cm-config
+          key: cluster
+    - name: environment
+      valueFrom:
+        configMapKeyRef:
+          name: otel-cm-config
+          key: environment
+    - name: location
+      valueFrom:
+        configMapKeyRef:
+          name: otel-cm-config
+          key: location
+  config: |
+    exporters:
+      debug: {}
+      otlp:
+        endpoint: observability.app.bunnings.com.au:443
+        auth:
+          authenticator: basicauth/client
+        headers:
+          X-Scope-OrgID: ${env:org_id}
+    extensions:
+      health_check: 
+         endpoint: "0.0.0.0:13133"
+      basicauth/client:
+        client_auth: # credentials must be consistent with those of the receiving collector.
+          username: ${env:OTLP_BASICAUTH_USERNAME}
+          password: ${env:OTLP_BASICAUTH_PASSWORD}
+    processors:
+      batch:
+        send_batch_size: 500
+        send_batch_max_size: 800
+      memory_limiter:
+        check_interval: 5s
+        limit_mib: 1500
+        spike_limit_mib: 300
+    receivers:
+      opencensus: {}
+      otlp:
+        protocols:
+          grpc:
+            endpoint: 0.0.0.0:4317
+          http:
+            endpoint: 0.0.0.0:4318
+      zipkin:
+        endpoint: 0.0.0.0:9411
+      prometheus:
+        config:
+          global:
+            scrape_interval: 60s
+            scrape_timeout: 10s
+            external_labels:
+              cluster: ${env:cluster}
+              env: ${env:environment}
+              loc: ${env:location}            
+          scrape_configs:
+          - job_name: kubernetes-nodes-cadvisor
+            bearer_token_file: /var/run/secrets/kubernetes.io/serviceaccount/token
+            kubernetes_sd_configs:
+              - role: node
+            relabel_configs:
+              - action: labelmap
+                regex: __meta_kubernetes_node_label_(.+)
+              - replacement: kubernetes.default.svc:443
+                target_label: __address__
+              - regex: (.+)
+                replacement: /api/v1/nodes/$$1/proxy/metrics/cadvisor
+                source_labels:
+                  - __meta_kubernetes_node_name
+                target_label: __metrics_path__
+            scheme: https
+            tls_config:
+              ca_file: /var/run/secrets/kubernetes.io/serviceaccount/ca.crt
+              insecure_skip_verify: true
+          - job_name: kubernetes-pods
+            kubernetes_sd_configs:
+              - role: pod
+            relabel_configs:
+              - action: keep
+                regex: true
+                source_labels:
+                  - __meta_kubernetes_pod_annotation_prometheus_io_scrape
+              - action: replace
+                regex: (.+)
+                source_labels:
+                  - __meta_kubernetes_pod_annotation_prometheus_io_path
+                target_label: __metrics_path__
+              - action: replace
+                regex: ([^:]+)(?::\d+)?;(\d+)
+                replacement: $$1:$$2
+                source_labels:
+                  - __address__
+                  - __meta_kubernetes_pod_annotation_prometheus_io_port
+                target_label: __address__
+              - action: labelmap
+                regex: __meta_kubernetes_pod_label_(.+)
+              - action: replace
+                source_labels:
+                  - __meta_kubernetes_namespace
+                target_label: kubernetes_namespace
+              - action: replace
+                source_labels:
+                  - __meta_kubernetes_pod_name
+                target_label: kubernetes_pod_name
+              - action: drop
+                regex: Pending|Succeeded|Failed
+                source_labels:
+                  - __meta_kubernetes_pod_phase
+          - job_name: kube-state-metrics
+            honor_timestamps: true
+            metrics_path: /metrics
+            scheme: http
+            static_configs:
+            - targets:
+              - kube-state-metrics.observability-system.svc.cluster.local:8080
+    service:
+      extensions:
+      - health_check
+      - basicauth/client
+      pipelines:
+        logs:
+          exporters:
+          - debug
+          processors:
+          - memory_limiter
+          - batch
+          receivers:
+          - otlp
+        metrics:
+          exporters:
+          - otlp
+          processors:
+          - memory_limiter
+          - batch
+          receivers:
+          - otlp
+          - opencensus
+          - prometheus
+        traces:
+          exporters:
+          - otlp
+          - debug
+          processors:
+          - memory_limiter
+          - batch
+          receivers:
+          - otlp
+          - opencensus
+          - zipkin
+      telemetry:
+        logs:
+          encoding: json
+        metrics:
+          address: 0.0.0.0:8888
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
+metadata:
+  name: otel-prometheus-scrape
+  namespace: observability-system
+rules:
+  - apiGroups: [""]
+    resources:
+      - nodes
+      - nodes/proxy
+      - services
+      - endpoints
+      - pods
+    verbs: ["get", "list", "watch"]
+  - apiGroups:
+      - extensions
+    resources:
+      - ingresses
+    verbs: ["get", "list", "watch"]
+  - nonResourceURLs: ["/metrics"]
+    verbs: ["get"]
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRoleBinding
+metadata:
+  name: otel-prometheus-scrape
+  namespace: observability-system
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: ClusterRole
+  name: otel-prometheus-scrape
+subjects:
+  - kind: ServiceAccount
+    name: otel-collector
+    namespace: observability-system
