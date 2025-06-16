@@ -94,27 +94,27 @@
     },
     {
       "matchDatasources": ["helm"],
-      "matchPackageNames": ["SparebankenVest/azure-key-vault-to-kubernetes"],
-      "registryUrls": ["https://charts.azurecr.io"]
+      "matchPackageNames": ["spv-charts"],
+      "registryUrls": ["https://charts.spvapi.no/"]
     },
     {
       "matchDatasources": ["helm"],
       "matchPackageNames": ["dynatrace-operator"],
-      "registryUrls": ["https://raw.githubusercontent.com/Dynatrace/helm-charts/main/repos/stable"]
+      "registryUrls": ["https://raw.githubusercontent.com/Dynatrace/dynatrace-operator/main/config/helm/repos/stable"]
     },
     {
       "matchDatasources": ["helm"],
-      "matchPackageNames": ["kedacore/keda"],
+      "matchPackageNames": ["keda"],
       "registryUrls": ["https://kedacore.github.io/charts"]
     },
     {
       "matchDatasources": ["helm"],
-      "matchPackageNames": ["elastic/logstash"],
+      "matchPackageNames": ["logstash"],
       "registryUrls": ["https://helm.elastic.co"]
     },
     {
       "matchDatasources": ["helm"],
-      "matchPackageNames": ["open-telemetry/opentelemetry-operator"],
+      "matchPackageNames": ["opentelemetry-operator"],
       "registryUrls": ["https://open-telemetry.github.io/opentelemetry-helm-charts"]
     }
   ]
