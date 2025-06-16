@@ -14,4 +14,4 @@ patchesStrategicMerge:
         spec:
           containers:
             - name: argo-rollouts
-              image: quay.io/argoproj/argo-rollouts:v1.8.3
+              image: quay.io/argoproj/argo-rollouts:v1.7.2
