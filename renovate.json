@@ -94,8 +94,8 @@
     },
     {
       "matchDatasources": ["helm"],
-      "matchPackageNames": ["spv-charts"],
-      "registryUrls": ["https://charts.spvapi.no/"]
+      "matchPackageNames": ["akv2k8s"],
+      "registryUrls": ["https://github.com/SparebankenVest/public-helm-charts/tree/master/stable"]
     },
     {
       "matchDatasources": ["helm"],
