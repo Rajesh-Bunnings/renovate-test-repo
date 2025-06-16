@@ -30,7 +30,7 @@
       "matchStrings": [
         "version:\\s*\"(?<currentValue>[\\d.]+)\"\\s*#\\s*Use the version from vars"
       ],
-      "depNameTemplate": "SparebankenVest/azure-key-vault-to-kubernetes",
+      "depNameTemplate": "akv2k8s",
       "datasourceTemplate": "helm",
       "versioningTemplate": "semver"
     },
@@ -50,7 +50,7 @@
       "matchStrings": [
         "version:\\s*\"(?<currentValue>[\\d.]+)\"\\s*#\\s*Use the version from vars"
       ],
-      "depNameTemplate": "kedacore/keda",
+      "depNameTemplate": "keda",
       "datasourceTemplate": "helm",
       "versioningTemplate": "semver"
     },
@@ -60,7 +60,7 @@
       "matchStrings": [
         "version:\\s*\"(?<currentValue>[\\d.]+)\"\\s*#\\s*Use the version from vars"
       ],
-      "depNameTemplate": "elastic/logstash",
+      "depNameTemplate": "logstash",
       "datasourceTemplate": "helm",
       "versioningTemplate": "semver"
     },
@@ -70,7 +70,7 @@
       "matchStrings": [
         "version:\\s*\"(?<currentValue>[\\d.]+)\"\\s*#\\s*Use the version from vars"
       ],
-      "depNameTemplate": "ingress-nginx/ingress-nginx",
+      "depNameTemplate": "ingress-nginx",
       "datasourceTemplate": "helm",
       "versioningTemplate": "semver"
     },
@@ -80,7 +80,7 @@
       "matchStrings": [
         "version:\\s*\"(?<currentValue>[\\d.]+)\"\\s*#\\s*Use the version from vars"
       ],
-      "depNameTemplate": "open-telemetry/opentelemetry-operator",
+      "depNameTemplate": "opentelemetry-operator",
       "datasourceTemplate": "helm",
       "versioningTemplate": "semver"
     }
@@ -116,6 +116,11 @@
       "matchDatasources": ["helm"],
       "matchPackageNames": ["opentelemetry-operator"],
       "registryUrls": ["https://open-telemetry.github.io/opentelemetry-helm-charts"]
+    },
+    {
+      "matchDatasources": ["helm"],
+      "matchPackageNames": ["ingress-nginx"],
+      "registryUrls": ["https://kubernetes.github.io/ingress-nginx"]
     }
   ]
 }
