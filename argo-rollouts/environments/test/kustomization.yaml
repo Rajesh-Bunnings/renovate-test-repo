@@ -1,0 +1,17 @@
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+bases:
+  - ../../base
+patchesStrategicMerge:
+  - |
+    apiVersion: apps/v1
+    kind: Deployment
+    metadata:
+      name: argo-rollouts
+      namespace: argo-rollouts
+    spec:
+      template:
+        spec:
+          containers:
+            - name: argo-rollouts
+              image: quay.io/argoproj/argo-rollouts:v1.7.2
