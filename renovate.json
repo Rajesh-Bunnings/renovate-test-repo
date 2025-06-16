@@ -4,15 +4,12 @@
     "config:recommended"
   ],
   "enabledManagers": [
-    "custom.regex"
+    "regex"
   ],
-  "customManagers": [
+  "regexManagers": [
     {
-      "customType": "regex",
-      "description": "Update dev environment first",
-      "managerFilePatterns": [
-        "/^argo-rollouts/environments/.*/kustomization\\.yaml$/"
-      ],
+      "description": "Update quay.io argo-rollouts image tags",
+      "fileMatch": ["^argo-rollouts/environments/.*/kustomization\\.yaml$"],
       "matchStrings": [
         "(?<depName>quay\\.io/argoproj/argo-rollouts):(?<currentValue>[\\w.-]+)"
       ],
@@ -25,7 +22,7 @@
       "matchStrings": [
         "version:\\s*\"(?<currentValue>[\\d.]+)\"\\s*#\\s*Use the version from vars"
       ],
-      "depName": "jetstack/cert-manager",
+      "depNameTemplate": "jetstack/cert-manager",
       "datasourceTemplate": "helm",
       "versioningTemplate": "semver"
     }
