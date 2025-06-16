@@ -26,5 +26,12 @@
       "datasourceTemplate": "helm",
       "versioningTemplate": "semver"
     }
+  ],
+  "packageRules": [
+    {
+      "matchDatasources": ["helm"],
+      "matchPackageNames": ["jetstack/cert-manager"],
+      "registryUrls": ["https://charts.jetstack.io"]
+    }
   ]
 }
