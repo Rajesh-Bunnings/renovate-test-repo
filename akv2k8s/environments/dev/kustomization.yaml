@@ -12,7 +12,7 @@ patchesStrategicMerge:
     spec:
       chart:
         spec:
-          version: "2.7.2"  # Use the version from vars
+          version: "2.7.3"  # Use the version from vars
 configMapGenerator:
   - name: akv2k8s-values
     namespace: akv2k8s
