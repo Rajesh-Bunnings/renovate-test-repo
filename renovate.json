@@ -12,7 +12,8 @@
           "(?<depName>quay\\.io/argoproj/argo-rollouts):(?<currentValue>[\\w.-]+)"
         ],
         "datasourceTemplate": "docker",
-        "versioningTemplate": "semver"
+        "versioningTemplate": "semver",
+        "depNameTemplate": "argo-rollouts-dev"
       },
       {
         "description": "Update test environment after dev",
@@ -21,7 +22,8 @@
           "(?<depName>quay\\.io/argoproj/argo-rollouts):(?<currentValue>[\\w.-]+)"
         ],
         "datasourceTemplate": "docker",
-        "versioningTemplate": "semver"
+        "versioningTemplate": "semver",
+        "depNameTemplate": "argo-rollouts-test"
       }
     ]
     }
