@@ -8,6 +8,14 @@
         ],
         "datasourceTemplate": "docker",
         "versioningTemplate": "semver"
+      },
+      {
+        "fileMatch": ["^argo-rollouts/environments/test/deployment\\.yaml$"],
+        "matchStrings": [
+          "(?<depName>quay\\.io/argoproj/argo-rollouts):(?<currentValue>[\\w.-]+)"
+        ],
+        "datasourceTemplate": "docker",
+        "versioningTemplate": "semver"
       }
     ]
   }
