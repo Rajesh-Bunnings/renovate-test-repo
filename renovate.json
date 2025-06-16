@@ -22,7 +22,7 @@
       "matchStrings": [
         "version:\\s*\"(?<currentValue>[\\d.]+)\"\\s*#\\s*Use the version from vars"
       ],
-      "depNameTemplate": "jetstack/cert-manager",
+      "depNameTemplate": "cert-manager",
       "datasourceTemplate": "helm",
       "versioningTemplate": "semver"
     }
@@ -30,7 +30,7 @@
   "packageRules": [
     {
       "matchDatasources": ["helm"],
-      "matchPackageNames": ["jetstack/cert-manager"],
+      "matchPackageNames": ["cert-manager"],
       "registryUrls": ["https://charts.jetstack.io"]
     }
   ]
