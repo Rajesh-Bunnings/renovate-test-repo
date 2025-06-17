@@ -96,12 +96,12 @@
     },
     {
       "description": "Update otel-collector Helm chart versions",
-      "fileMatch": ["^otel-collector/environments/dev/kustomization\\.yaml$"],
+      "fileMatch": ["^otel-collector/environments/dev/otel-collector\\.yaml$"],
       "matchStrings": [
-        "version:\\s*\"(?<currentValue>[\\d.]+)\"\\s*#\\s*Use the version from vars"
+        "image:\\s*(?<depName>otel/opentelemetry-collector-contrib):(?<currentValue>[\\w.-]+)\\s*# Basic Auth is available only in contrib version\\."
       ],
       "depNameTemplate": "opentelemetry-collector",
-      "datasourceTemplate": "helm",
+      "datasourceTemplate": "docker",
       "versioningTemplate": "semver"
     }
     
@@ -135,11 +135,6 @@
     {
       "matchDatasources": ["helm"],
       "matchPackageNames": ["opentelemetry-operator"],
-      "registryUrls": ["https://open-telemetry.github.io/opentelemetry-helm-charts"]
-    },
-    {
-      "matchDatasources": ["helm"],
-      "matchPackageNames": ["opentelemetry-collector"],
       "registryUrls": ["https://open-telemetry.github.io/opentelemetry-helm-charts"]
     },
     {
