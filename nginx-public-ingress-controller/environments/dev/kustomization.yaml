@@ -12,7 +12,7 @@ patchesStrategicMerge:
     spec:
       chart:
         spec:
-          version: "4.12.1"  # Use the version from vars
+          version: "4.12.3"  # Use the version from vars
 configMapGenerator:
   - name: ingress-nginx-public
     namespace: ingress-public
