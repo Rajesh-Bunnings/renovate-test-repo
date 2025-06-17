@@ -75,12 +75,32 @@
       "versioningTemplate": "semver"
     },
     {
+      "description": "Update ingress-nginx Helm chart version",
+      "fileMatch": ["^nginx-public-ingress-controller/environments/dev/kustomization\\.yaml$"],
+      "matchStrings": [
+        "version:\\s*\"(?<currentValue>[\\d.]+)\"\\s*#\\s*Use the version from vars"
+      ],
+      "depNameTemplate": "ingress-nginx",
+      "datasourceTemplate": "helm",
+      "versioningTemplate": "semver"
+    },
+    {
       "description": "Update OpenTelemetry Operator Helm chart version",
       "fileMatch": ["^observability/environments/dev/kustomization\\.yaml$"],
       "matchStrings": [
         "version:\\s*\"(?<currentValue>[\\d.]+)\"\\s*#\\s*Use the version from vars"
       ],
       "depNameTemplate": "opentelemetry-operator",
+      "datasourceTemplate": "helm",
+      "versioningTemplate": "semver"
+    },
+    {
+      "description": "Update otel-collector Helm chart versions",
+      "fileMatch": ["^otel-collector/environments/dev/kustomization\\.yaml$"],
+      "matchStrings": [
+        "version:\\s*\"(?<currentValue>[\\d.]+)\"\\s*#\\s*Use the version from vars"
+      ],
+      "depNameTemplate": "opentelemetry-collector",
       "datasourceTemplate": "helm",
       "versioningTemplate": "semver"
     }
@@ -115,6 +135,11 @@
     {
       "matchDatasources": ["helm"],
       "matchPackageNames": ["opentelemetry-operator"],
+      "registryUrls": ["https://open-telemetry.github.io/opentelemetry-helm-charts"]
+    },
+    {
+      "matchDatasources": ["helm"],
+      "matchPackageNames": ["opentelemetry-collector"],
       "registryUrls": ["https://open-telemetry.github.io/opentelemetry-helm-charts"]
     },
     {
