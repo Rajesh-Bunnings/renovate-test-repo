@@ -100,7 +100,6 @@
       "matchStrings": [
         "image:\\s*(?<depName>otel/opentelemetry-collector-contrib):(?<currentValue>[\\w.-]+)\\s*# Basic Auth is available only in contrib version\\."
       ],
-      "depNameTemplate": "opentelemetry-collector",
       "datasourceTemplate": "docker",
       "versioningTemplate": "semver"
     }
@@ -141,6 +140,11 @@
       "matchDatasources": ["helm"],
       "matchPackageNames": ["ingress-nginx"],
       "registryUrls": ["https://kubernetes.github.io/ingress-nginx"]
+    },
+    {
+      "matchDatasources": ["docker"],
+      "matchPackageNames": ["opentelemetry-collector-contrib"],
+      "registryUrls": ["https://open-telemetry.github.io/opentelemetry-helm-charts"]
     }
   ]
 }
