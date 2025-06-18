@@ -4,11 +4,16 @@
     "config:recommended"
   ],
   "commitMessagePrefix": "feat(PSDO-1234): ",
-  "enabledManagers": ["regex"],
-  "regexManagers": [
+  "enabledManagers": [
+    "custom.regex"
+  ],
+  "customManagers": [
     {
+      "customType": "regex",
       "description": "Update quay.io argo-rollouts image tags",
-      "fileMatch": ["^argo-rollouts/environments/.*/kustomization\\.yaml$"],
+      "managerFilePatterns": [
+        "/^argo-rollouts/environments/.*/kustomization\\.yaml$/"
+      ],
       "matchStrings": [
         "(?<depName>quay\\.io/argoproj/argo-rollouts):(?<currentValue>[\\w.-]+)"
       ],
@@ -16,8 +21,11 @@
       "versioningTemplate": "semver"
     },
     {
+      "customType": "regex",
       "description": "Update cert-manager Helm chart versions",
-      "fileMatch": ["^cert-manager/environments/dev/kustomization\\.yaml$"],
+      "managerFilePatterns": [
+        "/^cert-manager/environments/dev/kustomization\\.yaml$/"
+      ],
       "matchStrings": [
         "version:\\s*\"(?<currentValue>[\\d.]+)\"\\s*#\\s*Use the version from vars"
       ],
@@ -26,8 +34,11 @@
       "versioningTemplate": "semver"
     },
     {
+      "customType": "regex",
       "description": "Update akv2k8s Helm chart version",
-      "fileMatch": ["^akv2k8s/environments/dev/kustomization\\.yaml$"],
+      "managerFilePatterns": [
+        "/^akv2k8s/environments/dev/kustomization\\.yaml$/"
+      ],
       "matchStrings": [
         "version:\\s*\"(?<currentValue>[\\d.]+)\"\\s*#\\s*Use the version from vars"
       ],
@@ -36,8 +47,11 @@
       "versioningTemplate": "semver"
     },
     {
+      "customType": "regex",
       "description": "Update Dynatrace Operator Helm chart version",
-      "fileMatch": ["^dynatrace/environments/dev/kustomization\\.yaml$"],
+      "managerFilePatterns": [
+        "/^dynatrace/environments/dev/kustomization\\.yaml$/"
+      ],
       "matchStrings": [
         "version:\\s*\"(?<currentValue>[\\d.]+)\"\\s*#\\s*Use the version from vars"
       ],
@@ -46,8 +60,11 @@
       "versioningTemplate": "semver"
     },
     {
+      "customType": "regex",
       "description": "Update KEDA Helm chart version",
-      "fileMatch": ["^keda/environments/dev/kustomization\\.yaml$"],
+      "managerFilePatterns": [
+        "/^keda/environments/dev/kustomization\\.yaml$/"
+      ],
       "matchStrings": [
         "version:\\s*\"(?<currentValue>[\\d.]+)\"\\s*#\\s*Use the version from vars"
       ],
@@ -56,8 +73,11 @@
       "versioningTemplate": "semver"
     },
     {
+      "customType": "regex",
       "description": "Update Logstash Helm chart version",
-      "fileMatch": ["^logstash/environments/dev/kustomization\\.yaml$"],
+      "managerFilePatterns": [
+        "/^logstash/environments/dev/kustomization\\.yaml$/"
+      ],
       "matchStrings": [
         "version:\\s*\"(?<currentValue>[\\d.]+)\"\\s*#\\s*Use the version from vars"
       ],
@@ -66,8 +86,11 @@
       "versioningTemplate": "semver"
     },
     {
+      "customType": "regex",
       "description": "Update ingress-nginx Helm chart version",
-      "fileMatch": ["^nginx-ingress-controller/environments/dev/kustomization\\.yaml$"],
+      "managerFilePatterns": [
+        "/^nginx-ingress-controller/environments/dev/kustomization\\.yaml$/"
+      ],
       "matchStrings": [
         "version:\\s*\"(?<currentValue>[\\d.]+)\"\\s*#\\s*Use the version from vars"
       ],
@@ -76,8 +99,11 @@
       "versioningTemplate": "semver"
     },
     {
+      "customType": "regex",
       "description": "Update ingress-nginx-public Helm chart version",
-      "fileMatch": ["^nginx-public-ingress-controller/environments/dev/kustomization\\.yaml$"],
+      "managerFilePatterns": [
+        "/^nginx-public-ingress-controller/environments/dev/kustomization\\.yaml$/"
+      ],
       "matchStrings": [
         "version:\\s*\"(?<currentValue>[\\d.]+)\"\\s*#\\s*Use the version from vars"
       ],
@@ -86,8 +112,11 @@
       "versioningTemplate": "semver"
     },
     {
+      "customType": "regex",
       "description": "Update OpenTelemetry Operator Helm chart version",
-      "fileMatch": ["^observability/environments/dev/kustomization\\.yaml$"],
+      "managerFilePatterns": [
+        "/^observability/environments/dev/kustomization\\.yaml$/"
+      ],
       "matchStrings": [
         "version:\\s*\"(?<currentValue>[\\d.]+)\"\\s*#\\s*Use the version from vars"
       ],
@@ -96,56 +125,106 @@
       "versioningTemplate": "semver"
     },
     {
+      "customType": "regex",
       "description": "Update otel-collector Helm chart versions",
-      "fileMatch": ["^otel-collector/environments/dev/otel-collector\\.yaml$"],
+      "managerFilePatterns": [
+        "/^otel-collector/environments/dev/otel-collector\\.yaml$/"
+      ],
       "matchStrings": [
         "image:\\s*(?<depName>otel/opentelemetry-collector-contrib):(?<currentValue>[\\w.-]+)\\s*# Basic Auth is available only in contrib version\\."
       ],
       "datasourceTemplate": "docker",
       "versioningTemplate": "semver"
     }
-    
   ],
   "packageRules": [
     {
-      "matchDatasources": ["helm"],
-      "matchPackageNames": ["cert-manager"],
-      "registryUrls": ["https://charts.jetstack.io"]
+      "matchDatasources": [
+        "helm"
+      ],
+      "matchPackageNames": [
+        "cert-manager"
+      ],
+      "registryUrls": [
+        "https://charts.jetstack.io"
+      ]
     },
     {
-      "matchDatasources": ["helm"],
-      "matchPackageNames": ["akv2k8s"],
-      "registryUrls": ["https://charts.spvapi.no/"]
+      "matchDatasources": [
+        "helm"
+      ],
+      "matchPackageNames": [
+        "akv2k8s"
+      ],
+      "registryUrls": [
+        "https://charts.spvapi.no/"
+      ]
     },
     {
-      "matchDatasources": ["helm"],
-      "matchPackageNames": ["dynatrace-operator"],
-      "registryUrls": ["https://raw.githubusercontent.com/Dynatrace/dynatrace-operator/main/config/helm/repos/stable"]
+      "matchDatasources": [
+        "helm"
+      ],
+      "matchPackageNames": [
+        "dynatrace-operator"
+      ],
+      "registryUrls": [
+        "https://raw.githubusercontent.com/Dynatrace/dynatrace-operator/main/config/helm/repos/stable"
+      ]
     },
     {
-      "matchDatasources": ["helm"],
-      "matchPackageNames": ["keda"],
-      "registryUrls": ["https://kedacore.github.io/charts"]
+      "matchDatasources": [
+        "helm"
+      ],
+      "matchPackageNames": [
+        "keda"
+      ],
+      "registryUrls": [
+        "https://kedacore.github.io/charts"
+      ]
     },
     {
-      "matchDatasources": ["helm"],
-      "matchPackageNames": ["logstash"],
-      "registryUrls": ["https://helm.elastic.co"]
+      "matchDatasources": [
+        "helm"
+      ],
+      "matchPackageNames": [
+        "logstash"
+      ],
+      "registryUrls": [
+        "https://helm.elastic.co"
+      ]
     },
     {
-      "matchDatasources": ["helm"],
-      "matchPackageNames": ["opentelemetry-operator"],
-      "registryUrls": ["https://open-telemetry.github.io/opentelemetry-helm-charts"]
+      "matchDatasources": [
+        "helm"
+      ],
+      "matchPackageNames": [
+        "opentelemetry-operator"
+      ],
+      "registryUrls": [
+        "https://open-telemetry.github.io/opentelemetry-helm-charts"
+      ]
     },
     {
-      "matchDatasources": ["helm"],
-      "matchPackageNames": ["ingress-nginx"],
-      "registryUrls": ["https://kubernetes.github.io/ingress-nginx"]
+      "matchDatasources": [
+        "helm"
+      ],
+      "matchPackageNames": [
+        "ingress-nginx"
+      ],
+      "registryUrls": [
+        "https://kubernetes.github.io/ingress-nginx"
+      ]
     },
     {
-      "matchDatasources": ["docker"],
-      "matchPackageNames": ["opentelemetry-collector-contrib"],
-      "registryUrls": ["https://open-telemetry.github.io/opentelemetry-helm-charts"]
+      "matchDatasources": [
+        "docker"
+      ],
+      "matchPackageNames": [
+        "opentelemetry-collector-contrib"
+      ],
+      "registryUrls": [
+        "https://open-telemetry.github.io/opentelemetry-helm-charts"
+      ]
     }
   ]
 }
