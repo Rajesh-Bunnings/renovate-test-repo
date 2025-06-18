@@ -12,7 +12,7 @@ patchesStrategicMerge:
     spec:
       chart:
         spec:
-          version: "7.17.3"  # Use the version from vars
+          version: "8.5.1"  # Use the version from vars
 configMapGenerator:
   - name: logstash-values
     namespace: logs
