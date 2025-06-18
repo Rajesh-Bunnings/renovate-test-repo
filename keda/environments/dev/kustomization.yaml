@@ -12,4 +12,4 @@ patchesStrategicMerge:
     spec:
       chart:
         spec:
-          version: "2.16.0"  # Use the version from vars
+          version: "2.17.2"  # Use the version from vars
