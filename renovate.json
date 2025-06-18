@@ -3,6 +3,7 @@
   "extends": [
     "config:recommended"
   ],
+  "commitMessagePrefix": "feat(PSDO-1234): ",
   "enabledManagers": ["regex"],
   "regexManagers": [
     {
@@ -75,7 +76,7 @@
       "versioningTemplate": "semver"
     },
     {
-      "description": "Update ingress-nginx Helm chart version",
+      "description": "Update ingress-nginx-public Helm chart version",
       "fileMatch": ["^nginx-public-ingress-controller/environments/dev/kustomization\\.yaml$"],
       "matchStrings": [
         "version:\\s*\"(?<currentValue>[\\d.]+)\"\\s*#\\s*Use the version from vars"
