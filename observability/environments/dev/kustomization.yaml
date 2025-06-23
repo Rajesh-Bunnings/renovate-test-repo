@@ -12,7 +12,7 @@ patchesStrategicMerge:
     spec:
       chart:
         spec:
-          version: "0.69.0"  # Use the version from vars
+          version: "0.90.4"  # Use the version from vars
       values:
         manager:
           collectorImage:
